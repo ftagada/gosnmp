@@ -20,7 +20,7 @@ import (
 	"os"
 	"path/filepath"
 
-	g "github.com/gosnmp/gosnmp"
+	g "github.com/ftagada/gosnmp"
 )
 
 func main() {
