@@ -460,7 +460,10 @@ func marshalObjectIdentifier(oid string) ([]byte, error) {
 		}
 		i++
 	}
-	if i < 2 || i > 128 {
+	// RFC2578 says "at least 2, ..., at most 128 sub-identifier" but this breaks some vendor
+	// implementations like JUNIPER-FIREWALL-MIB::jnxFirewallCounterTable which
+	// uses 2 DisplayString as indices (each of size 0..255). For now, relax the upper limit
+	if i < 2 { // || i > 128 {
 		return []byte{}, fmt.Errorf("unable to marshal OID: Invalid object identifier")
 	}
 
