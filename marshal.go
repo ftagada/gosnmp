@@ -6,7 +6,6 @@ package gosnmp
 
 import (
 	"bytes"
-	"context"
 	"encoding/asn1"
 	"encoding/binary"
 	"errors"
@@ -198,12 +197,12 @@ func (x *GoSNMP) sendOneRequest(packetOut *SnmpPacket,
 
 			x.Logger.Printf("Retry number %d. Last error was: %v", retries, err)
 			if withContextDeadline && strings.Contains(err.Error(), "timeout") {
-				err = context.DeadlineExceeded
+				err = fmt.Errorf("request timeout: %w", err)
 				break
 			}
 			if retries > x.Retries {
 				if strings.Contains(err.Error(), "timeout") {
-					err = fmt.Errorf("request timeout (after %d retries)", retries-1)
+					err = fmt.Errorf("request timeout (after %d retries): %w", retries-1, err)
 				}
 				break
 			}
